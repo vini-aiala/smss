@@ -1,5 +1,6 @@
 import socket
 import string
+import sys
 from time import sleep
 
 from Crypto.Random import get_random_bytes
@@ -10,7 +11,7 @@ TAMANHO_MAXIMO = 1443
 
 ALGORITMOS = [0, 1, 2, 3, 4, 5]
 MODOS = [0, 1, 2, 3, 4, 5]
-PADDINGS = [0]
+PADDINGS = [0, 1]
 CHARS = string.ascii_letters
 
 
@@ -129,7 +130,7 @@ class Servidor:
             pass
             return
         elif tipo == 5:
-            exit(0)
+            sys.exit(0)
         else:
             # Se não é par_req nem lista, logo é inesperado.
             print('Erro: Tipo inesperado.')
