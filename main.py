@@ -5,7 +5,7 @@ from Servidor import Servidor
 
 PORTA = 50000
 RA_VINICIUS = 59544
-RA_FABIO = 60317
+RA_GUILHERME = 20386
 tipo_cliente = ['cliente', 'client', 'c']
 tipo_servidor = ['servidor', 'server', 's']
 
@@ -14,7 +14,7 @@ def main():
     try:
         tipo = input('Qual o tipo do processo?\n')
         if tipo in tipo_cliente:
-            cliente = Cliente(RA_FABIO, PORTA, RA_VINICIUS)
+            cliente = Cliente(RA_GUILHERME, PORTA, RA_VINICIUS)
             while True:
                 try:
                     cliente.envia_msg()

@@ -1,5 +1,8 @@
 import socket
+import sys
 from time import sleep
+
+from Crypto.Util.Padding import pad
 
 from Cifra import cria_cifra
 
@@ -57,7 +60,7 @@ class Cliente:
     def envia_msg(self):
         """Envia uma string para o servidor."""
 
-        tipo = input("\nQual o tipo de transmissão?\nOpções: (D)ados, (L)ista ou (S)air\n")
+        tipo = input("\nQual o tipo de transmissão?\nOpções: (D)ados ou (S)air\n")
         if tipo in tipo_dados:
             dados = input('Digite a mensagem a ser enviada:\n')
             try:
@@ -99,12 +102,30 @@ class Cliente:
                 cifra = cria_cifra(algoritmo, modo[0], iv)
 
                 # Envia Dados
-                criptografado = cifra.encrypt(dados.encode())
+                if not padding:
+                    # Encripta texto em bytes
+                    criptografado = cifra.encrypt(dados.encode())
+                else:
+                    # Seleciona padding e depois encripta
+                    if algoritmo in range(0, 3):
+                        padded = pad(dados.encode(), 16)
+                    else:
+                        padded = pad(dados.encode(), 8)
+                    criptografado = cifra.encrypt(padded)
+
                 tipo_erro = (2 | (0 << 4)).to_bytes(1, byteorder='big')
                 tamanho = len(criptografado).to_bytes(2, byteorder='big')
                 msg_dados = tipo_erro + tamanho + criptografado
                 print('Enviando mensagem criptografada:', dados, '→', criptografado)
                 self.envia_bytes(msg_dados)
+            except ValueError:
+                print("Erro enviando dados: O modo selecionado requer que o tamanho da mensagem seja múltiplo do "
+                      "tamanho do bloco do algoritmo selecionado. Considere o uso de padding.")
+                tipo_erro = (2 | (2 << 4)).to_bytes(1, byteorder='big')
+                tamanho = (0).to_bytes(2, byteorder='big')
+                msg_dados = tipo_erro + tamanho
+                self.envia_bytes(msg_dados)
+                return
             except Exception as e:
                 print("Erro enviando dados:", e)
                 tipo_erro = (2 | (2 << 4)).to_bytes(1, byteorder='big')
@@ -128,11 +149,10 @@ class Cliente:
             except Exception as e:
                 print(e)
 
-        elif tipo in tipo_lista:
-            pass
         elif tipo in tipo_sair:
             self.envia_sair()
-            exit(0)
+            sys.exit(0)
+
         else:
             raise Exception('Tipo de mensagem não reconhecido')
 
