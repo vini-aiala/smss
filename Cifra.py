@@ -53,18 +53,18 @@ def cria_cifra(algoritmo, modo, iv):
 
         # Se for CBC
         if modo in range(1, 2):
-            return DES.new(key=CHAVE_64, mode=DES.MODE_CBC, iv=iv)
+            return DES.new(key=CHAVE_64, mode=DES.MODE_CBC, iv=iv[0:8])
 
         # Se for CFB, precisamos especificar o S
         if modo in range(2, 6):
             if modo == 2:
-                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv, segment_size=1)
+                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv[0:8], segment_size=1)
             elif modo == 3:
-                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv, segment_size=8)
+                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv[0:8], segment_size=8)
             elif modo == 4:
-                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv, segment_size=64)
+                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv[0:8], segment_size=64)
             else:
-                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv, segment_size=128)
+                return DES.new(key=CHAVE_64, mode=DES.MODE_CFB, iv=iv[0:8], segment_size=128)
 
         # Se for counter
         else:
@@ -96,16 +96,16 @@ def cria_cifra(algoritmo, modo, iv):
         if modo in range(2, 6):
             if modo == 2:
                 # DES3128
-                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv, segment_size=1)
+                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv[0:8], segment_size=1)
             elif modo == 3:
                 # DES3128
-                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv, segment_size=8)
+                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv[0:8], segment_size=8)
             elif modo == 4:
                 # DES3128
-                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv, segment_size=64)
+                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv[0:8], segment_size=64)
             else:
                 # DES3128
-                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv, segment_size=128)
+                return DES3.new(key=chave, mode=DES3.MODE_CFB, iv=iv[0:8], segment_size=128)
 
         # Se for counter
         else:

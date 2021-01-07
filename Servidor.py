@@ -10,7 +10,7 @@ from Cifra import cria_cifra
 
 TAMANHO_MAXIMO = 1443
 
-ALGORITMOS = [0, 1, 2, 3, 4, 5]
+ALGORITMOS = [0, 1, 2]
 MODOS = [0, 1, 3, 4, 5]
 PADDINGS = [0, 1]
 CHARS = string.ascii_letters
