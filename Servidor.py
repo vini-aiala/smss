@@ -4,6 +4,7 @@ import sys
 from time import sleep
 
 from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import unpad
 
 from Cifra import cria_cifra
 
@@ -109,7 +110,13 @@ class Servidor:
                     erro = (dados[0] & b'\xf0'[0]) >> 4
                     if erro == 0:
                         criptografado = dados[3:]
-                        descriptografado = cifra.decrypt(criptografado).decode("utf-8")
+                        if not padding:
+                            descriptografado = cifra.decrypt(criptografado).decode("utf-8")
+                        else:
+                            if algoritmo in range(0, 3):
+                                descriptografado = unpad(cifra.decrypt(criptografado), 16).decode("utf-8")
+                            else:
+                                descriptografado = unpad(cifra.decrypt(criptografado), 8).decode("utf-8")
                         print('Dados recebidos:', criptografado, '→', descriptografado)
                         print('Enviando confirmação de envio...')
                         self.envia_conf(0)
